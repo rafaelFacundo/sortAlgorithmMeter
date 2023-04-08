@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+using namespace std;
 
 template <typename T, int n>
 class VectorElements {
@@ -9,9 +11,34 @@ class VectorElements {
         VectorElements(){};
         
         VectorElements(int* numbers): v(numbers) {};
-        T& operator[] (T i){};
+        
+        /* T& operator[] (T i){
+             
+        }; */
 
-        T teste(){return *(v);};
+        int tamanho() {
+            return len;
+        }
 
-        int tamanho() {return len;}
+        bool isItSorted() {
+            int *positionImLooking = this->v + (this->len - 1);
+            while (positionImLooking != this->v) {
+                if (*(positionImLooking-1) > *(positionImLooking))
+                    break;
+                --positionImLooking;
+            }
+            if((this->v - positionImLooking) == 0)
+                return true;
+            else
+                return false;
+        }
+
+        template<void f(T v[], int begin, int end)>
+        void sort(int startIndex, int endIndex) {
+            f(this->v, startIndex, endIndex);
+        }
+
+
+
+
 };

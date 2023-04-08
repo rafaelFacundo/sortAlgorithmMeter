@@ -6,7 +6,8 @@ int main () {
     int vt[5] = {1,2,3,4,5};
     VectorElements<int, 5> testVector{vt};
 
-    cout << "primeiro: " << testVector.teste() << '\n';
-
     cout << "tamanho: " << testVector.tamanho() << '\n';
+
+    cout << "Is the vector sorted? \n";
+    cout << testVector.isItSorted() << '\n';
 }
