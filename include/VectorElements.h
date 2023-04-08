@@ -16,8 +16,8 @@ class VectorElements {
              
         }; */
 
-        int tamanho() {
-            return len;
+        int* getV() {
+            return v;
         }
 
         bool isItSorted() {
