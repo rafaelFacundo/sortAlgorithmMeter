@@ -38,6 +38,13 @@ class VectorElements {
             f(this->v, startIndex, endIndex);
         }
 
+        void printVector() {
+            for(int* i = v; i != (v + this->len); ++i) {
+                cout << *(i) << " ";
+            }
+            cout << '\n';
+        }
+
 
 
 

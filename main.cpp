@@ -22,6 +22,7 @@ void replaceOrNoFather( T v[], int positionImLooking, int lastInde) {
     int fatherPosition = floor((positionImLooking - 1)/2);
     int sonOnePosi = (2 * fatherPosition) + 1;
     int SonTwoPosi = (2 * fatherPosition) + 2;
+
     if (sonOnePosi <= lastInde && SonTwoPosi <= lastInde) {
         indeOfMaxi = takeMaximun(v, fatherPosition, sonOnePosi, SonTwoPosi);
         tempoNumb = v[fatherPosition];
@@ -35,6 +36,16 @@ void replaceOrNoFather( T v[], int positionImLooking, int lastInde) {
     
 }
 
+bool doesThisNodeHaveTwoSons(int fatherPosition, int lastInde) {
+    int sonOnePosi = (2 * fatherPosition) + 1;
+    int SonTwoPosi = (2 * fatherPosition) + 2;
+    if (sonOnePosi <= lastInde && SonTwoPosi <= lastInde) {
+        return true;
+    }else {
+        return false;
+    }
+}
+
 template<typename T>
 void fixInclusion(T v[], int startInde, int endInde) {
     int positionImLooking = endInde;
@@ -44,7 +55,31 @@ void fixInclusion(T v[], int startInde, int endInde) {
         positionImLooking = fatherPosition;
         fatherPosition = floor((positionImLooking - 1)/2);
     }
-} 
+}
+
+template<typename T>
+void fixRemotion(T v[],int startInde, int endInde ) {
+    int indeBiggest = startInde;
+    int indeFather = startInde;
+    int sonOne = 2 * indeFather + 1;
+    int sonTwo = 2 * indeFather + 2;
+    int tempoNum;
+    
+
+    if (sonOne < (endInde+1) && v[indeBiggest] < v[sonOne]) {
+        indeBiggest = sonOne;
+    }
+    if (sonTwo < (endInde+1) && v[indeBiggest] < v[sonTwo]) {
+        indeBiggest = sonTwo;
+    }
+
+    if (indeBiggest != indeFather) {
+        tempoNum = v[indeFather];
+        v[indeFather] = v[indeBiggest];
+        v[indeBiggest] = tempoNum;
+        fixRemotion(v, indeBiggest, endInde);
+    }
+}
 
 template<typename T>
 void createHeap(T v[], int startInde, int endInde) {
@@ -57,21 +92,32 @@ void createHeap(T v[], int startInde, int endInde) {
 }
 
 template<typename T>
+void printV(T v[], int tam) {
+    for (int i = 0; i < tam; ++i) {
+        cout << v[i] << " ";
+    }
+    cout << '\n';
+}
+
+template<typename T>
 void HeapSort(T v[], int startInde, int endInde) {
     createHeap(v, startInde, endInde);
+    T tempoNum;
+    while(startInde != endInde) {
+        tempoNum = v[endInde];
+        v[endInde] = v[startInde];
+        v[startInde] = tempoNum;
+        fixRemotion(v,startInde, endInde-1);
+        --endInde;
+    }
 }
 
 int main () {
-    int vt[5] = {5,1,2,3,4};
-    VectorElements<int, 5> testVector{vt};
+    int vt[7] = {5,1,2,3,4,10,5};
+    VectorElements<int, 7> testVector{vt};
 
+    testVector.sort<HeapSort<int>>(0, 6);
 
-
-
-    testVector.sort<createHeap<int>>(0, 4);
-
-    for (int i = 0; i < 5; ++i) {
-        cout << testVector.getV()[i] << '\n';
-    }
+    testVector.printVector();
 
 }
