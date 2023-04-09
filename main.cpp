@@ -112,11 +112,51 @@ void HeapSort(T v[], int startInde, int endInde) {
     }
 }
 
+int pivo(int inicio, int fim) {
+    return floor((fim-inicio)/2);
+}
+
+template<typename T>
+void lomutoPartition(T v[], int start, int end, int pivotIndex) {
+    T pivot = v[pivotIndex];
+    v[pivotIndex] = v[end];
+    v[end] = pivot;
+    int biggers = start-1;
+    int smallers = start-1;
+    T tempNum;
+    while (biggers < end) {
+        if (v[biggers+1] >= pivot) {
+            ++biggers;
+        }else {
+            tempNum = v[biggers + 1];
+            v[biggers+1] = v[smallers+1];
+            v[smallers+1] = tempNum;
+            ++smallers;
+            ++biggers;
+        }
+    }
+    tempNum = v[smallers + 1];
+    v[smallers+1] = v[end];
+    v[end] = tempNum;
+}
+
+template<typename T>
+void lomutoQuickSort(T v[], int start, int end) {
+    int pivot = pivo(start, end);
+    if (end-start > 1)
+        lomutoPartition(v,start,end,pivot);
+        lomutoQuickSort(v,start, pivot-1);
+        lomutoQuickSort(v,pivot+1, end);
+}
+
+
 int main () {
     int vt[7] = {5,1,2,3,4,10,5};
     VectorElements<int, 7> testVector{vt};
 
-    testVector.sort<HeapSort<int>>(0, 6);
+    /* testVector.sort<HeapSort<int>>(0, 6); */
+
+    lomutoQuickSort(vt,0,6);
 
     testVector.printVector();
 
