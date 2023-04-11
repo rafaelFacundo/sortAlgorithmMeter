@@ -1,5 +1,5 @@
-main: ./build/main.o 
-	g++ -Wall -Wextra -std=c++17 -pedantic -o programa ./build/main.o 
+main: ./build/main.o
+	g++ -Wall -Wextra -std=c++17 -pedantic -o programa ./build/main.o
 
 ./build/main.o: ./include/VectorElements.h ./include/SortAlgos.h
 	g++ -c main.cpp -o ./build/main.o
