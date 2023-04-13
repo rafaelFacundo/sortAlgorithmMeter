@@ -13,7 +13,7 @@ int main () {
 
     testVector.sort<introSortWithHeapSort<int>>(0, 6);
 
-    /* lomutoQuickSort(vt,0,6,0); */
+    /* lomutoQuickSort(vt,0,6,0); */    
 
     testVector.generateInstances('C');
 

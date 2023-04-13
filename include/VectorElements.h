@@ -46,10 +46,17 @@ class VectorElements {
             cout << '\n';
         }
 
+        void piorCasoRecur(T *v[], int start, int end, int n) {
+            int pivotIndex = pivo(start, end);
+            v[pivotIndex] = n;
+            if ((end - start + 1) > 1) {
+                piorCasoRecur(v,start,pivotIndex-1,n+1);
+                piorCasoRecur(v,pivotIndex+1,end,n+1)
+            }
+        }
 
         void gerar_pior_caso(T *v, int len) {
-            int pivotIndex = floor((fim)/2);
-            
+            piorCasoRecur(v, 0, len-1, 1);
         }
 
         void generateAscendingOrder(T v[], int len) {
