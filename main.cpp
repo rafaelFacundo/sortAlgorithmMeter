@@ -15,6 +15,8 @@ int main () {
 
     /* lomutoQuickSort(vt,0,6,0); */
 
+    testVector.generateInstances('C');
+
     testVector.printVector();
 
 }
