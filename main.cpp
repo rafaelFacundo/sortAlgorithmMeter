@@ -8,14 +8,14 @@ using namespace std;
 
 
 int main () {
-    int vt[7] = {5,1,2,3,4,10,5};
-    VectorElements<int, 7> testVector{vt};
+    int vt[3] = {0,0,0};
+    VectorElements<int, 3> testVector{vt};
 
-    testVector.sort<introSortWithHeapSort<int>>(0, 6);
+    /* testVector.sort<introSortWithHeapSort<int>>(0, 6); */
 
     /* lomutoQuickSort(vt,0,6,0); */    
 
-    testVector.generateInstances('C');
+    testVector.generateInstances('P');
 
     testVector.printVector();
 

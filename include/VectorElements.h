@@ -1,5 +1,6 @@
 #pragma once
 #include "./RandomNumbers.h"
+#include "./SortAlgos.h"
 #include <iostream>
 #include <math.h>
 using namespace std;
@@ -46,17 +47,19 @@ class VectorElements {
             cout << '\n';
         }
 
-        void piorCasoRecur(T *v[], int start, int end, int n) {
+        void piorCasoRecur(T v[], int start, int end, int& num) {
             int pivotIndex = pivo(start, end);
-            v[pivotIndex] = n;
+            v[pivotIndex] = num;
+            ++num;
             if ((end - start + 1) > 1) {
-                piorCasoRecur(v,start,pivotIndex-1,n+1);
-                piorCasoRecur(v,pivotIndex+1,end,n+1)
+                piorCasoRecur(v, start, pivotIndex-1, num);
+                piorCasoRecur(v, pivotIndex+1, end, num);
             }
         }
 
         void gerar_pior_caso(T *v, int len) {
-            piorCasoRecur(v, 0, len-1, 1);
+            int num = 1;
+            piorCasoRecur(v, 0, len-1, num);
         }
 
         void generateAscendingOrder(T v[], int len) {
