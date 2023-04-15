@@ -8,8 +8,9 @@ using namespace std;
 template <typename T, int n>
 class VectorElements {
     private:
-        T* v;
+        T** v;
         int len = n;
+        int currentInclusionIndex = 0;
         RandomNumbers randon{};
 
         
@@ -17,38 +18,24 @@ class VectorElements {
         VectorElements(){};
         
         VectorElements(int* numbers): v(numbers) {};
-
-        void setV(T v[]) {
-            this.v = v;
-        }
         
         int* getV() {
             return v;
         }
-
-        bool isItSorted() {
-            int *positionImLooking = this->v + (this->len - 1);
-            while (positionImLooking != this->v) {
-                if (*(positionImLooking-1) > *(positionImLooking))
-                    break;
-                --positionImLooking;
-            }
-            if((this->v - positionImLooking) == 0)
-                return true;
-            else
-                return false;
-        }
-
-        template<void f(T v[], int begin, int end)>
-        void sort(int startIndex, int endIndex) {
-            f(this->v, startIndex, endIndex);
-        }
-
-        void printVector() {
+        
+        void printVector(T* v) {
             for(int* i = v; i != (v + this->len); ++i) {
                 cout << *(i) << " ";
             }
             cout << '\n';
+        }
+
+        void printVectors() {
+            int *vectorToPrint;
+            for(int i = 0; i < currentInclusionIndex; ++i) {
+                printVector(v[i]);
+                cout << '\n';
+            }
         }
 
         void piorCasoRecur(T v[], int start, int end, int& num) {
@@ -90,26 +77,58 @@ class VectorElements {
         }        
 
 
-        void generateInstances(const char option) {
-            switch (option)
-            {
-            case 'A':
-                randomInstance(this->v,this->len);
-                break;
-            case 'C':
-                generateAscendingOrder(this->v,this->len);
-                break;
-            case 'D':
-                generateDescendingOrder(this->v,this->len);
-                break;
-            case 'P':
-                gerar_pior_caso(this->v, this->len);
-                break;
-            
-            default:
-                break;
+        void generateInstances(int numberOfInstances, void (*f)(T*, int)) {
+            for (int i = 0; i <= numberOfInstances; ++i) {
+                f(v[i], this->len);
             }
         }
+
+        void generateInstances(const char option, int numberOfInstances) {
+            switch (option) {
+                case 'A':
+                    generateInstances(numberOfInstances, );
+                    break;
+                /* case 'C':
+                    generateInstances<generateAscendingOrder>(numberOfInstances);
+                    break;
+                case 'D':
+                    generateInstances<generateDescendingOrder>(numberOfInstances);
+                    break;
+                case 'P':
+                    generateInstances<gerar_pior_caso>(numberOfInstances);
+                    break; */
+                
+                default:
+                    break;
+            }
+        }
+
+        /* bool isItSorted() {
+            int *positionImLooking = this->v + (this->len - 1);
+            while (positionImLooking != this->v) {
+                if (*(positionImLooking-1) > *(positionImLooking))
+                    break;
+                --positionImLooking;
+            }
+            if((this->v - positionImLooking) == 0)
+                return true;
+            else
+                return false;
+        }
+
+        template<void f(T v[], int begin, int end)>
+        void sort(int startIndex, int endIndex) {
+            f(this->v, startIndex, endIndex);
+        }
+
+        void printVector() {
+            for(int* i = v; i != (v + this->len); ++i) {
+                cout << *(i) << " ";
+            }
+            cout << '\n';
+        }
+
+         */
 
 
 
