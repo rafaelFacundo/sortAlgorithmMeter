@@ -17,6 +17,10 @@ class VectorElements {
         VectorElements(){};
         
         VectorElements(int* numbers): v(numbers) {};
+
+        void setV(T v[]) {
+            this.v = v;
+        }
         
         int* getV() {
             return v;
