@@ -1,7 +1,10 @@
 #pragma once
 #include <iostream>
 #include <math.h>
+#include "./RandomNumbers.h"
 using namespace std;
+
+RandomNumbers randon{};
 
 int pivo2(int inicio, int fim) {
     return ( inicio + floor((fim-inicio)/2) );
@@ -28,7 +31,6 @@ void gerar_pior_caso(T *v, int len) {
 template<typename T>
 void generateAscendingOrder(T v[], int len) {
     int randomNum = randon.generateAnumber();
-    cout << "len é: " << len << '\n';
     for (int i = 0; i < len; ++i) {
         v[i] = ++randomNum;
 
@@ -49,12 +51,5 @@ void randomInstance(T *v, int len) {
     for (int i = 0; i < len; ++i) {
         v[i] = randon.generateAnumber();
     }
-}        
-
-
-template<typename T, void f(T* vector, int lenght)>
-void generateInstances(int numberOfInstances) {
-    for (int i = 0; i <= numberOfInstances; ++i) {
-        f(v[i], this->len);
-    }
 }
+

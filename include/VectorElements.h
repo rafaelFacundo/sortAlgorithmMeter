@@ -1,106 +1,125 @@
 #pragma once
 #include "./RandomNumbers.h"
 #include "./SortAlgos.h"
+#include "./Instances.h"
+#include <chrono>
 #include <iostream>
 #include <math.h>
 using namespace std;
+using namespace chrono;
 
-template <typename T, int n>
+template <typename T>
 class VectorElements {
     private:
-        T** v;
-        int len = n;
-        int currentInclusionIndex = 0;
-        RandomNumbers randon{};
-
-        
+        T** vectors;
+        int numberOfInstances;
+        int lenOfEachInstance;
+        int limit;
     public:
         VectorElements(){};
-        
-        VectorElements(int* numbers): v(numbers) {};
-        
-        int* getV() {
-            return v;
+        VectorElements(int nOfIns, int instLen) : numberOfInstances(nOfIns), lenOfEachInstance(instLen){
+            setLimit();
+            this->vectors = (int**)(malloc(numberOfInstances * sizeof(int*)));
+            for (int i = 0; i < numberOfInstances; ++i) {
+                this->vectors[i] = new int[lenOfEachInstance];
+            }
+        }
+        VectorElements(T** vec, int nOfIns, int instLen) : vectors(vec), numberOfInstances(nOfIns), lenOfEachInstance(instLen) {}
+
+        void copyArray(T** vec) {
+            for (int j = 0; j < numberOfInstances; ++j) {
+                for(int k = 0; k < lenOfEachInstance; ++k) {
+                    this->vectors[j][k] = vec[j][k];
+                }
+            }
+        }
+
+        void setLimit() {
+            int n = this->lenOfEachInstance;
+            this->limit = 0;
+            while (n > 1) {
+                n = n >> 1;
+                ++this->limit;
+            }
         }
         
         void printVector(T* v) {
-            for(int* i = v; i != (v + this->len); ++i) {
+            for(int* i = v; i != (v + this->lenOfEachInstance); ++i) {
                 cout << *(i) << " ";
             }
             cout << '\n';
         }
 
         void printVectors() {
-            int *vectorToPrint;
-            for(int i = 0; i < currentInclusionIndex; ++i) {
-                printVector(v[i]);
-                cout << '\n';
+            for(int i = 0; i < this->numberOfInstances; ++i) {
+                printVector(this->vectors[i]);
             }
         }
 
-        void piorCasoRecur(T v[], int start, int end, int& num) {
-            int pivotIndex = pivo(start, end);
-            v[pivotIndex] = num;
-            ++num;
-            if ((end - start + 1) > 1) {
-                piorCasoRecur(v, start, pivotIndex-1, num);
-                piorCasoRecur(v, pivotIndex+1, end, num);
+        template<void f(T* vector, int lenght)>
+        void generateEachInstances() {
+            for (int i = 0; i < this->numberOfInstances; ++i) {
+                f(this->vectors[i], this->lenOfEachInstance);
             }
         }
 
-        void gerar_pior_caso(T *v, int len) {
-            int num = 1;
-            piorCasoRecur(v, 0, len-1, num);
-        }
-
-        void generateAscendingOrder(T v[], int len) {
-            int randomNum = randon.generateAnumber();
-            cout << "len é: " << len << '\n';
-            for (int i = 0; i < len; ++i) {
-                v[i] = ++randomNum;
-
-            }
-        }
-
-        void generateDescendingOrder(T v[], int len){
-            int randomNum = randon.generateAnumber();
-            for (int i = 0; i < len; ++i) {
-                v[i] = --randomNum;
-
-            }
-        }
-
-        void randomInstance(T *v, int len) {
-            for (int i = 0; i < len; ++i) {
-                v[i] = randon.generateAnumber();
-            }
-        }        
-
-
-        void generateInstances(int numberOfInstances, void (*f)(T*, int)) {
-            for (int i = 0; i <= numberOfInstances; ++i) {
-                f(v[i], this->len);
-            }
-        }
-
-        void generateInstances(const char option, int numberOfInstances) {
+        void generateInstances(const char option) {
             switch (option) {
                 case 'A':
-                    generateInstances(numberOfInstances, );
+                    generateEachInstances<randomInstance>();
                     break;
-                /* case 'C':
-                    generateInstances<generateAscendingOrder>(numberOfInstances);
+                case 'C':
+                    generateEachInstances<generateAscendingOrder>();
                     break;
                 case 'D':
-                    generateInstances<generateDescendingOrder>(numberOfInstances);
+                    generateEachInstances<generateDescendingOrder>();
                     break;
                 case 'P':
-                    generateInstances<gerar_pior_caso>(numberOfInstances);
-                    break; */
+                    generateEachInstances<gerar_pior_caso>();
+                    break;
                 
                 default:
                     break;
             }
+        }
+
+        template<void f(T v[], int begin, int end)>
+        duration<double> sort(T vec[], int startIndex, int endIndex) {
+            auto begin = steady_clock::now();
+            f(vec, startIndex, endIndex);
+            auto finish = steady_clock::now();
+            return  finish - begin;
+        }
+
+        template<void f(T v[], int begin, int end)>
+        duration<double> sortEachInstance() {
+            duration<double> d;
+            for(int i = 0; i < this->numberOfInstances; ++i) {
+                d += sort<f>(this->vectors[i], 0, (this->lenOfEachInstance-1));
+                
+            };
+            
+            return d;
+        }
+
+        duration<double> sortVectors(const char option) {
+            duration<double> d;
+            switch (option)
+            {
+            case 'Q':
+                d = sortEachInstance<lomutoQuickSort>();
+                break;
+            case 'H':
+                d = sortEachInstance<HeapSort>();
+                break;
+            case 'I':
+                d = sortEachInstance<introSortWithHeapSort>();
+            case 'S':
+                d = sortEachInstance<introSortWithInsertionSort>();
+            default:
+                break;
+            }
+            return d;
         }
 
         /* bool isItSorted() {
@@ -115,21 +134,7 @@ class VectorElements {
             else
                 return false;
         }
-
-        template<void f(T v[], int begin, int end)>
-        void sort(int startIndex, int endIndex) {
-            f(this->v, startIndex, endIndex);
-        }
-
-        void printVector() {
-            for(int* i = v; i != (v + this->len); ++i) {
-                cout << *(i) << " ";
-            }
-            cout << '\n';
-        }
-
-         */
-
+        */
 
 
 

@@ -174,7 +174,7 @@ void introSortRecursion(T v[], int start, int end, double limit, int N) {
         int newPivotInde = lomutoPartition(v,start,end,pivot);
         introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);
         introSortRecursion<T,f>(v,newPivotInde+1, end, limit, N+1);
-    }else if (((end-start) + 1) > 1 && limit > 10) {
+    }else if (((end-start) + 1) > 1 && limit >= N) {
         f(v,start,end);
     }
 }
@@ -182,11 +182,21 @@ void introSortRecursion(T v[], int start, int end, double limit, int N) {
 template<typename T>
 void introSortWithHeapSort(T v[], int start, int end) {
     int len = end - start + 1;
-    introSortRecursion<int,HeapSort>(v,start,end,10,0);
+    int limit = 0;
+    while (len > 1) {
+        len = len >> 1;
+        ++limit;
+    }
+    introSortRecursion<T,HeapSort>(v,start,end,limit,0);
 }
 
 template<typename T>
 void introSortWithInsertionSort(T v[], int start, int end) {
     int len = end - start + 1;
-    introSortRecursion<int, InsertionSort>(v,start,end,10,0);
+    int limit = 0;
+    while (len > 1) {
+        len = len >> 1;
+        ++limit;
+    }
+    introSortRecursion<T, InsertionSort>(v,start,end,limit,0);
 }
