@@ -26,6 +26,13 @@ class VectorElements {
         }
         VectorElements(T** vec, int nOfIns, int instLen) : vectors(vec), numberOfInstances(nOfIns), lenOfEachInstance(instLen) {}
 
+        ~VectorElements() {
+            for(int i = 0; i < numberOfInstances; ++i) {
+                delete this->vectors[i];
+            }
+            delete this->vectors;
+        }
+
         void copyArray(T** vec) {
             for (int j = 0; j < numberOfInstances; ++j) {
                 for(int k = 0; k < lenOfEachInstance; ++k) {
@@ -83,15 +90,15 @@ class VectorElements {
             }
         }
 
-        template<void f(T v[], int begin, int end)>
+        template<void f(T v[], int begin, int end, int stopLimit)>
         duration<double> sort(T vec[], int startIndex, int endIndex) {
             auto begin = steady_clock::now();
-            f(vec, startIndex, endIndex);
+            f(vec, startIndex, endIndex, this->limit);
             auto finish = steady_clock::now();
             return  finish - begin;
         }
 
-        template<void f(T v[], int begin, int end)>
+        template<void f(T v[], int begin, int end, int stopLimit)>
         duration<double> sortEachInstance() {
             duration<double> d;
             for(int i = 0; i < this->numberOfInstances; ++i) {

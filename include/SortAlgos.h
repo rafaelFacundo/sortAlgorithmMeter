@@ -100,8 +100,10 @@ void printV(T v[], int tam) {
     cout << '\n';
 }
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 template<typename T>
-void HeapSort(T v[], int startInde, int endInde) {
+void HeapSort(T v[], int startInde, int endInde, int limit = 0) {
     createHeap(v, startInde, endInde);
     T tempoNum;
     while(startInde != endInde) {
@@ -142,8 +144,10 @@ int lomutoPartition(T v[], int start, int end, int pivotIndex) {
     return (smallers+1);
 }
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= */
+
 template<typename T>
-void lomutoQuickSort(T v[], int start, int end) {
+void lomutoQuickSort(T v[], int start, int end, int limit = 0) {
     int pivot = pivo(start, end);
     if (((end-start) + 1) > 1) {
         int newPivotInde = lomutoPartition(v,start,end,pivot);
@@ -153,7 +157,7 @@ void lomutoQuickSort(T v[], int start, int end) {
 }
 
 template<typename T>
-void InsertionSort(T v[], int start, int end) {
+void InsertionSort(T v[], int start, int end, int stopLimit = 0) {
     int j;
     T tempNumb;
     for (int i = 1; i <= end; ++i) {
@@ -167,7 +171,7 @@ void InsertionSort(T v[], int start, int end) {
     }
 }
 
-template<typename T, void f(T v[], int start, int end)>
+template<typename T, void f(T v[], int start, int end, int stopLimit)>
 void introSortRecursion(T v[], int start, int end, double limit, int N) {
     int pivot = pivo(start, end);
     if (((end-start) + 1) > 1 && N < limit) {
@@ -175,28 +179,18 @@ void introSortRecursion(T v[], int start, int end, double limit, int N) {
         introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);
         introSortRecursion<T,f>(v,newPivotInde+1, end, limit, N+1);
     }else if (((end-start) + 1) > 1 && limit >= N) {
-        f(v,start,end);
+        f(v,start,end, limit);
     }
 }
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 template<typename T>
-void introSortWithHeapSort(T v[], int start, int end) {
-    int len = end - start + 1;
-    int limit = 0;
-    while (len > 1) {
-        len = len >> 1;
-        ++limit;
-    }
+void introSortWithHeapSort(T v[], int start, int end, int limit = 0) {
     introSortRecursion<T,HeapSort>(v,start,end,limit,0);
 }
 
 template<typename T>
-void introSortWithInsertionSort(T v[], int start, int end) {
-    int len = end - start + 1;
-    int limit = 0;
-    while (len > 1) {
-        len = len >> 1;
-        ++limit;
-    }
+void introSortWithInsertionSort(T v[], int start, int end, int limit = 0) {
     introSortRecursion<T, InsertionSort>(v,start,end,limit,0);
 }
