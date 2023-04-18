@@ -14,4 +14,8 @@ class RandomNumbers {
         int generateAnumber() {
             return distribution(generator);
         }
+
+        int generateAnumberInInterval(int maximun) {
+            return distribution(generator) % maximun;
+        }
 };

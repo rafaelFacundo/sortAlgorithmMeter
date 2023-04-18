@@ -1,4 +1,5 @@
 #pragma once
+#include "./Instances.h"
 #include <math.h>
 #include <iostream>
 using namespace std;
@@ -115,8 +116,15 @@ void HeapSort(T v[], int startInde, int endInde, int limit = 0) {
     }
 }
 
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
 int pivo(int inicio, int fim) {
     return ( inicio + floor((fim-inicio)/2) );
+}
+
+int pivoAletory(int fim) {
+    return generateAnumberInInterval(fim);
 }
 
 template<typename T>
@@ -144,7 +152,6 @@ int lomutoPartition(T v[], int start, int end, int pivotIndex) {
     return (smallers+1);
 }
 
-/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= */
 
 template<typename T>
 void lomutoQuickSort(T v[], int start, int end, int limit = 0) {
@@ -157,30 +164,80 @@ void lomutoQuickSort(T v[], int start, int end, int limit = 0) {
 }
 
 template<typename T>
-void InsertionSort(T v[], int start, int end, int stopLimit = 0) {
-    int j;
-    T tempNumb;
-    for (int i = 1; i <= end; ++i) {
-        j = i;
-        while (j < i && v[j-1] > v[j]) {
-            tempNumb = v[j];
-            v[j] = v[j-1];
-            v[j-1] = tempNumb;
-            --j;
-        }
+void lomutoQuickSortWithAleatoryPivot(T v[], int start, int end, int limit = 0) {
+    int pivot = pivoAletory(end);
+    if (((end-start) + 1) > 1) {
+        int newPivotInde = lomutoPartition(v,start,end,pivot);
+        lomutoQuickSort(v,start, newPivotInde-1);
+        lomutoQuickSort(v,newPivotInde+1, end);
     }
 }
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+template<typename T>
+void InsertionSort(T v[], int start, int end, int stopLimit = 0) {
+    int j;
+    T value;
+    for (int i = 1; i <= end; ++i) {
+        value = v[i];
+        j = i - 1;
+        while (j >= start && v[j] > value) {
+            v[j+1] = v[j];
+            --j;
+        }
+        v[j+1] = value;
+    }
+}
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 template<typename T, void f(T v[], int start, int end, int stopLimit)>
 void introSortRecursion(T v[], int start, int end, double limit, int N) {
     int pivot = pivo(start, end);
-    if (((end-start) + 1) > 1 && N < limit) {
+    if (((end-start) + 1 ) > 1 && limit == N) {
+        
+        f(v,start,end, limit);
+    }
+
+    else if (((end-start) + 1) > 1 && N < limit) {
+        int newPivotInde = lomutoPartition(v,start,end,pivot);
+        
+        introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);
+        introSortRecursion<T,f>(v,newPivotInde+1, end, limit, N+1);
+    }
+
+    /* if (((end-start) + 1) > 1 && N < limit) {
         int newPivotInde = lomutoPartition(v,start,end,pivot);
         introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);
         introSortRecursion<T,f>(v,newPivotInde+1, end, limit, N+1);
     }else if (((end-start) + 1) > 1 && limit >= N) {
         f(v,start,end, limit);
+    } */
+}
+
+
+template<typename T, void f(T v[], int start, int end, int stopLimit)>
+void introSortRecursionWithInsertion(T v[], int start, int end, double limit, int N) {
+    int pivot = pivo(start, end);
+
+     if (((end-start) + 1) <= 30) {
+        InsertionSort(v,start,end, limit);
     }
+
+    else  if (((end-start) + 1) > 1 && limit >= N) {
+        
+        f(v,start,end, limit);
+    }
+
+     if (((end-start) + 1) > 1 && N < limit) {
+        int newPivotInde = lomutoPartition(v,start,end,pivot);
+        introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);
+        introSortRecursion<T,f>(v,newPivotInde+1, end, limit, N+1);
+    }
+
+    
 }
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -192,5 +249,5 @@ void introSortWithHeapSort(T v[], int start, int end, int limit = 0) {
 
 template<typename T>
 void introSortWithInsertionSort(T v[], int start, int end, int limit = 0) {
-    introSortRecursion<T, InsertionSort>(v,start,end,limit,0);
+    introSortRecursionWithInsertion<T, HeapSort>(v,start,end,limit,0);
 }

@@ -16,7 +16,18 @@ class VectorElements {
         int lenOfEachInstance;
         int limit;
     public:
+
+        void setLimit() {
+            int n = this->lenOfEachInstance;
+            this->limit = 0;
+            while (n > 1) {
+                n = n >> 1;
+                ++this->limit;
+            }
+        }
+
         VectorElements(){};
+
         VectorElements(int nOfIns, int instLen) : numberOfInstances(nOfIns), lenOfEachInstance(instLen){
             setLimit();
             this->vectors = (int**)(malloc(numberOfInstances * sizeof(int*)));
@@ -38,15 +49,6 @@ class VectorElements {
                 for(int k = 0; k < lenOfEachInstance; ++k) {
                     this->vectors[j][k] = vec[j][k];
                 }
-            }
-        }
-
-        void setLimit() {
-            int n = this->lenOfEachInstance;
-            this->limit = 0;
-            while (n > 1) {
-                n = n >> 1;
-                ++this->limit;
             }
         }
         
@@ -84,8 +86,8 @@ class VectorElements {
                 case 'P':
                     generateEachInstances<gerar_pior_caso>();
                     break;
-                
                 default:
+                    cout << "Entrada inválida\n";
                     break;
             }
         }
@@ -95,6 +97,8 @@ class VectorElements {
             auto begin = steady_clock::now();
             f(vec, startIndex, endIndex, this->limit);
             auto finish = steady_clock::now();
+            if (!(this->isItSorted(vec)))
+                cout << "erro\n";
             return  finish - begin;
         }
 
@@ -103,7 +107,6 @@ class VectorElements {
             duration<double> d;
             for(int i = 0; i < this->numberOfInstances; ++i) {
                 d += sort<f>(this->vectors[i], 0, (this->lenOfEachInstance-1));
-                
             };
             
             return d;
@@ -113,6 +116,9 @@ class VectorElements {
             duration<double> d;
             switch (option)
             {
+            case 'A':
+                d = sortEachInstance<lomutoQuickSortWithAleatoryPivot>();
+                break;
             case 'Q':
                 d = sortEachInstance<lomutoQuickSort>();
                 break;
@@ -129,19 +135,19 @@ class VectorElements {
             return d;
         }
 
-        /* bool isItSorted() {
-            int *positionImLooking = this->v + (this->len - 1);
-            while (positionImLooking != this->v) {
+        bool isItSorted(T v[]) {
+            int *positionImLooking = v + (this->lenOfEachInstance - 1);
+            while (positionImLooking != v) {
                 if (*(positionImLooking-1) > *(positionImLooking))
                     break;
                 --positionImLooking;
             }
-            if((this->v - positionImLooking) == 0)
+            if((v - positionImLooking) == 0)
                 return true;
             else
                 return false;
         }
-        */
+       
 
 
 

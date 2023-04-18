@@ -53,3 +53,6 @@ void randomInstance(T *v, int len) {
     }
 }
 
+int generateAnumberInInterval(int limit) {
+    return randon.generateAnumberInInterval(limit);
+}
