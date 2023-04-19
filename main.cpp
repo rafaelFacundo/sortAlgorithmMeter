@@ -28,7 +28,7 @@ int main (int argc, char* argv[]) {
     VectorElements<int>vectorsToSort{numberOfInstances, vectorLen};
     vectorsToSort.copyArray(teste);
 
-    cout << "Quick sort em ação..\n";
+     cout << "Quick sort em ação..\n";
     duration<double> quickSortDuration = vectorsToSort.sortVectors('Q');
     vectorsToSort.copyArray(teste);
 
@@ -56,8 +56,15 @@ int main (int argc, char* argv[]) {
     cout << "Intro sort com Heap sort: " << introHeapSortDuration.count() << " segundos" << '\n';
     cout << "Intro sort com Insertion sort: " << introInsertionSortDuration.count() << " segundos" << '\n';
     
+   /*  int teste2[10] = {1,10,6,0,5,8,1,0,3,0};
 
-   
+
+
+    vectorsToSort.sort<HeapSort>(teste2, 2,7);
+
+    cout << "finalizando \n";
+    printV(teste2, 10);
+    */
 
 }
 

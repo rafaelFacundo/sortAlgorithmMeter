@@ -5,6 +5,15 @@
 using namespace std;
 
 template<typename T>
+void printV(T v[], int tam) {
+    for (int i = 0; i < tam; ++i) {
+        cout << v[i] << " ";
+    }
+    cout << '\n';
+}
+
+
+template<typename T>
 int takeMaximun(T v[], int indeOne, int indeTwo, int indeThree) {
     if (v[indeOne] >= v[indeTwo] && v[indeOne] >= v[indeThree]) {
         return indeOne;
@@ -24,6 +33,10 @@ void replaceOrNoFather( T v[], int positionImLooking, int lastInde) {
     int fatherPosition = floor((positionImLooking - 1)/2);
     int sonOnePosi = (2 * fatherPosition) + 1;
     int SonTwoPosi = (2 * fatherPosition) + 2;
+
+    /* cout << "inclui " << v[positionImLooking] << '\n';
+    cout << "calculo do pai " << fatherPosition << '\n';
+    cout << "o pai dele é " << v[fatherPosition] << '\n'; */
 
     if (sonOnePosi <= lastInde && SonTwoPosi <= lastInde) {
         indeOfMaxi = takeMaximun(v, fatherPosition, sonOnePosi, SonTwoPosi);
@@ -52,11 +65,20 @@ template<typename T>
 void fixInclusion(T v[], int startInde, int endInde) {
     int positionImLooking = endInde;
     int fatherPosition = floor((positionImLooking - 1)/2);
-    while(v[positionImLooking] != v[startInde] && v[positionImLooking] > v[fatherPosition]) {
+   /*  cout << "na inclusa --- \n";
+    cout << "start " << startInde << '\n';
+    cout << "end  " << endInde << '\n';
+    cout << "inser " << v[positionImLooking] << "na posi " << positionImLooking << '\n';
+    cout << "ant \n";
+    printV(v, endInde); */
+    while(positionImLooking != startInde && v[positionImLooking] > v[fatherPosition]) {
         replaceOrNoFather(v, positionImLooking, endInde);
         positionImLooking = fatherPosition;
         fatherPosition = floor((positionImLooking - 1)/2);
     }
+   /*  cout << "dep \n";
+    printV(v, endInde);
+    cout << "saindo --\n"; */
 }
 
 template<typename T>
@@ -86,34 +108,50 @@ void fixRemotion(T v[],int startInde, int endInde ) {
 template<typename T>
 void createHeap(T v[], int startInde, int endInde) {
     int positionImLooking = startInde+1;
+    /* cout << "---\n";
+    cout << "start " << startInde << '\n';
+    cout << "end  " << endInde << '\n';
+    cout << "ant \n";
+    printV(v, endInde);
+    cout << "durante --- \n"; */
     fixInclusion(v, startInde, positionImLooking);
+    /* cout << "acavou --- \n";
+    cout << "dep \n";
+    printV(v, endInde); */
     while (positionImLooking <= endInde) {
         fixInclusion(v, startInde, positionImLooking);
         ++positionImLooking;
     }
 }
 
-template<typename T>
-void printV(T v[], int tam) {
-    for (int i = 0; i < tam; ++i) {
-        cout << v[i] << " ";
-    }
-    cout << '\n';
-}
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 template<typename T>
+void copyVector(T v1[], T v2[], int start, int end, int jStart) {
+    for (int j = jStart, i = start; i <= end; ++i,++j) {
+        v2[j] = v1[i];
+    }
+}
+
+template<typename T>
 void HeapSort(T v[], int startInde, int endInde, int limit = 0) {
-    createHeap(v, startInde, endInde);
-    T tempoNum;
-    while(startInde != endInde) {
+
+    if (startInde > 0) {
+        T vec2[(endInde-startInde) + 1];
+        copyVector(v,vec2,startInde,endInde, 0);
+        HeapSort(vec2,0, (endInde-startInde));
+        copyVector(vec2, v, 0,(endInde-startInde), startInde);
+    }else {
+        createHeap(v, startInde, endInde);
+        T tempoNum;
+        while(startInde != endInde) {
         tempoNum = v[endInde];
         v[endInde] = v[startInde];
         v[startInde] = tempoNum;
         fixRemotion(v,startInde, endInde-1);
         --endInde;
-    }
+    }}
 }
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -193,15 +231,16 @@ void InsertionSort(T v[], int start, int end, int stopLimit = 0) {
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
+
 template<typename T, void f(T v[], int start, int end, int stopLimit)>
 void introSortRecursion(T v[], int start, int end, double limit, int N) {
     int pivot = pivo(start, end);
     if (((end-start) + 1 ) > 1 && limit == N) {
-        
+     
         f(v,start,end, limit);
     }
 
-    else if (((end-start) + 1) > 1 && N < limit) {
+    if (((end-start) + 1) > 1 && N < limit) {
         int newPivotInde = lomutoPartition(v,start,end,pivot);
         
         introSortRecursion<T,f>(v,start, newPivotInde-1,limit,N+1);

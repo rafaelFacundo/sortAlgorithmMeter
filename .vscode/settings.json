@@ -2,6 +2,7 @@
     "files.associations": {
         "iostream": "cpp",
         "cmath": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "initializer_list": "cpp"
     }
 }

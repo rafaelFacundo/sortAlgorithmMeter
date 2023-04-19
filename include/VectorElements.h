@@ -97,8 +97,10 @@ class VectorElements {
             auto begin = steady_clock::now();
             f(vec, startIndex, endIndex, this->limit);
             auto finish = steady_clock::now();
-            if (!(this->isItSorted(vec)))
+            if (!(this->isItSorted(vec))) {
                 cout << "erro\n";
+                this->printVector(vec);
+            }
             return  finish - begin;
         }
 
