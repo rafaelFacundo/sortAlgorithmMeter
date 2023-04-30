@@ -19,11 +19,12 @@ int main(int argc, char *argv[])
     char option = *(argv[1]);
     int vectorOfInstances[2][vectorLen];
     RandomNumbers ran{};
-    VectorElements<int> algorithmSorter{};
+    VectorElements<int> algorithmSorter{numberOfInstances, vectorLen};
 
     for (int i = 0; i < numberOfInstances; ++i)
     {
         generateAInstace(vectorOfInstances[0], vectorLen, option);
+        cout << "Instância de número " << (i + 1) << " gerada.\n";
         for (int alg = 0; alg < 5; ++alg)
         {
             copyArray(vectorOfInstances[0], vectorOfInstances[1], vectorLen);
@@ -31,48 +32,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* VectorElements<int>generateInst{teste, numberOfInstances, vectorLen};
-generateInst.generateInstances(option);
-VectorElements<int>vectorsToSort{numberOfInstances, vectorLen};
-vectorsToSort.copyArray(teste);
-
- cout << "Quick sort em ação..\n";
-duration<double> quickSortDuration = vectorsToSort.sortVectors('Q');
-vectorsToSort.copyArray(teste);
-
-cout << "Quick sort com pivot aleatório em ação..\n";
-duration<double> quickSortAleatoryDuration = vectorsToSort.sortVectors('A');
-vectorsToSort.copyArray(teste);
-
-cout << "Heap sort em ação..\n";
-duration<double> heapSortDuration = vectorsToSort.sortVectors('H');
-vectorsToSort.copyArray(teste);
-
-cout << "Introsort com heap sort sort em ação..\n";
-duration<double> introHeapSortDuration = vectorsToSort.sortVectors('I');
-vectorsToSort.copyArray(teste);
-
-cout << "Intro sort com insertion sort em ação..\n";
-duration<double> introInsertionSortDuration = vectorsToSort.sortVectors('S');
-
-cout << "===========================================\n";
-
-cout << "AS DURAÇÕES DE CADA ALGORITMO FORAM: \n";
-cout << "Quick sort: " << quickSortDuration.count() << " segundos" << '\n';
-cout << "Quick sort com pivot aleatório: " << quickSortAleatoryDuration.count() << " segundos" << '\n';
-cout << "Heap sort: " << heapSortDuration.count() << " segundos" << '\n';
-cout << "Intro sort com Heap sort: " << introHeapSortDuration.count() << " segundos" << '\n';
-cout << "Intro sort com Insertion sort: " << introInsertionSortDuration.count() << " segundos" << '\n'; */
-
-    /*  int teste2[10] = {1,10,6,0,5,8,1,0,3,0};
-
-
-
-     vectorsToSort.sort<HeapSort>(teste2, 2,7);
-
-     cout << "finalizando \n";
-     printV(teste2, 10);
-     */
+    cout << "== TEMPO GASTO POR CADA ALGORITMO == \n";
+    cout << "== Quick sort com pivô aleatório -- " << algoTimes[0].count() << "segs" << '\n';
+    cout << "== Quick sort com pivô fixo ------- " << algoTimes[1].count() << "segs" << '\n';
+    cout << "== Heap sort ---------------------- " << algoTimes[2].count() << "segs" << '\n';
+    cout << "== Intro sort --------------------- " << algoTimes[3].count() << "segs" << '\n';
+    cout << "== Intro sort com Insertion sort -- " << algoTimes[4].count() << "segs" << '\n';
 }
 
 /* ./programa [Tipo de Instância] [Tamanho do Vetor] [Número de Instâncias] */
