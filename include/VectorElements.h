@@ -92,7 +92,7 @@ public:
 
     bool isItSorted(T v[], int len)
     {
-        int *positionImLooking = v + len;
+        int *positionImLooking = v + (len - 1);
         while (positionImLooking != v)
         {
             if (*(positionImLooking - 1) > *(positionImLooking))

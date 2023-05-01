@@ -33,11 +33,11 @@ int main(int argc, char *argv[])
     }
 
     cout << "== TEMPO GASTO POR CADA ALGORITMO == \n";
-    cout << "== Quick sort com pivô aleatório -- " << algoTimes[0].count() << "segs" << '\n';
-    cout << "== Quick sort com pivô fixo ------- " << algoTimes[1].count() << "segs" << '\n';
-    cout << "== Heap sort ---------------------- " << algoTimes[2].count() << "segs" << '\n';
-    cout << "== Intro sort --------------------- " << algoTimes[3].count() << "segs" << '\n';
-    cout << "== Intro sort com Insertion sort -- " << algoTimes[4].count() << "segs" << '\n';
+    cout << "== Quick sort com pivô aleatório -- " << algoTimes[0].count() << " seg" << '\n';
+    cout << "== Quick sort com pivô fixo ------- " << algoTimes[1].count() << " seg" << '\n';
+    cout << "== Heap sort ---------------------- " << algoTimes[2].count() << " seg" << '\n';
+    cout << "== Intro sort --------------------- " << algoTimes[3].count() << " seg" << '\n';
+    cout << "== Intro sort com Insertion sort -- " << algoTimes[4].count() << " seg" << '\n';
 }
 
 /* ./programa [Tipo de Instância] [Tamanho do Vetor] [Número de Instâncias] */
